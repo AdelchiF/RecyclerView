@@ -1,6 +1,8 @@
 package com.example.adelchi.recyclerview;
 
 import android.content.res.Configuration;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +42,17 @@ public class MainActivity extends AppCompatActivity {
             layoutManager = new GridLayoutManager(this, 2);
         }
 
-        for(int i=0; i<=15; i++){
-            persone.add(i, new Persona("adelchi" + i + "@gmail.com", false));
-        }
+        if (savedInstanceState != null) {
+            Gson gsonPersone = new Gson();
+            Type type = new TypeToken<List<Persona>>(){}.getType();
+            persone = gsonPersone.fromJson(savedInstanceState.getString("persone"), type);
+        }else {
 
+            for (int i = 0; i <= 15; i++) {
+                persone.add(i, new Persona("adelchi" + i + "@gmail.com", false));
+            }
+
+        }
         adapter = new MyAdapter(persone);
         recyclerView.setAdapter(adapter);
 
@@ -78,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Gson gsonPersone = new Gson();
+        String elencoPersone = gsonPersone.toJson(persone);
+        outState.putString("persone", elencoPersone);
+    }
+
     public class Persona{
 
         private String email;
@@ -103,5 +125,6 @@ public class MainActivity extends AppCompatActivity {
         public void setChecked(Boolean checked) {
             this.checked = checked;
         }
+
     }
 }
