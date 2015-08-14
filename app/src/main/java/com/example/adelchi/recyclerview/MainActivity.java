@@ -1,7 +1,9 @@
 package com.example.adelchi.recyclerview;
 
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -17,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private List<Persona> persone = new ArrayList<>();
 
+    private boolean checked = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new LinearLayoutManager(this);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            layoutManager = new LinearLayoutManager(this);
+        }else {
+            layoutManager = new GridLayoutManager(this, 2);
+        }
 
         for(int i=0; i<=15; i++){
             persone.add(i, new Persona("adelchi" + i + "@gmail.com", false));
@@ -56,12 +64,13 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.select_all) {
             for (Persona persona: persone
                  ) {
-                if(persona.getChecked()){
+                if(checked){
                     persona.setChecked(false);
                 }else {
                     persona.setChecked(true);
                 }
             }
+            checked = !checked;
             adapter.notifyDataSetChanged();
             return true;
         }
