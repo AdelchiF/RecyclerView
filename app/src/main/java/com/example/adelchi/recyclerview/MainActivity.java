@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             persone = gsonPersone.fromJson(savedInstanceState.getString("persone"), type);
         }else {
 
-            for (int i = 0; i <= 15; i++) {
+            for (int i = 0; i <= 150; i++) {
                 persone.add(i, new Persona("adelchi" + i + "@gmail.com", false));
             }
 
@@ -75,14 +76,23 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.select_all) {
-            for (Persona persona: persone
-                 ) {
-                if(checked){
-                    persona.setChecked(false);
-                }else {
-                    persona.setChecked(true);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    for (Persona persona: persone
+                            ) {
+                        if(checked){
+                            persona.setChecked(false);
+                            ((TextView)findViewById(R.id.select_all)).setText("Select all");
+                        }else {
+                            persona.setChecked(true);
+                            ((TextView)findViewById(R.id.select_all)).setText("Deselect all");
+                        }
+                    }
                 }
-            }
+            });
+            thread.run();
             checked = !checked;
             adapter.notifyDataSetChanged();
             return true;

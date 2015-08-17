@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Created by Adelchi on 14/08/2015.
+ * Adapter per l'elenco di email della lista
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
@@ -47,11 +48,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int i) {
 
         final MainActivity.Persona persona = persone.get(i);
 
         viewHolder.textView.setText(persona.getEmail());
+
+        viewHolder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete(viewHolder.getAdapterPosition());
+            }
+        });
 
         viewHolder.checkBox.setChecked(persona.getChecked());
 
@@ -72,4 +80,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return persone.size();
     }
 
+    public void delete(int position){
+        persone.remove(position);
+        notifyItemRemoved(position);
+    }
 }
