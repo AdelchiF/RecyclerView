@@ -33,21 +33,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = (RecyclerView)findViewById(R.id.my_recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         recyclerView.setHasFixedSize(true);
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             layoutManager = new LinearLayoutManager(this);
-        }else {
+        } else {
             layoutManager = new GridLayoutManager(this, 2);
         }
 
         if (savedInstanceState != null) {
             Gson gsonPersone = new Gson();
-            Type type = new TypeToken<List<Persona>>(){}.getType();
+            Type type = new TypeToken<List<Persona>>() {
+            }.getType();
             persone = gsonPersone.fromJson(savedInstanceState.getString("persone"), type);
-        }else {
+        } else {
 
             for (int i = 0; i <= 150; i++) {
                 persone.add(i, new Persona("adelchi" + i + "@gmail.com", false));
@@ -80,14 +81,14 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    for (Persona persona: persone
+                    for (Persona persona : persone
                             ) {
-                        if(checked){
+                        if (checked) {
                             persona.setChecked(false);
-                            ((TextView)findViewById(R.id.select_all)).setText("Select all");
-                        }else {
+                            ((TextView) findViewById(R.id.select_all)).setText("Select all");
+                        } else {
                             persona.setChecked(true);
-                            ((TextView)findViewById(R.id.select_all)).setText("Deselect all");
+                            ((TextView) findViewById(R.id.select_all)).setText("Deselect all");
                         }
                     }
                 }
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("persone", elencoPersone);
     }
 
-    public class Persona{
+    public class Persona {
 
         private String email;
         private Boolean checked;

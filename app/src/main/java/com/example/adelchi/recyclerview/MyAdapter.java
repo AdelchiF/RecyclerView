@@ -19,15 +19,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private ViewHolder viewHolder;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textView;
         public CheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.textView = (TextView)itemView.findViewById(R.id.text);
-            this.checkBox = (CheckBox)itemView.findViewById(R.id.checkbox);
+            this.textView = (TextView) itemView.findViewById(R.id.text);
+            this.checkBox = (CheckBox) itemView.findViewById(R.id.checkbox);
         }
     }
 
@@ -52,21 +52,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         final MainActivity.Persona persona = persone.get(i);
 
-        viewHolder.textView.setText(persona.getEmail());
-
-        viewHolder.textView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 delete(viewHolder.getAdapterPosition());
+
             }
         });
+
+        viewHolder.textView.setText(persona.getEmail());
 
         viewHolder.checkBox.setChecked(persona.getChecked());
 
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!persona.getChecked())
+                if (!persona.getChecked())
                     persona.setChecked(true);
                 else
                     persona.setChecked(false);
@@ -80,8 +81,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return persone.size();
     }
 
-    public void delete(int position){
+    public void delete(int position) {
         persone.remove(position);
         notifyItemRemoved(position);
     }
+
+
 }
