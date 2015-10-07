@@ -1,6 +1,7 @@
 package com.example.adelchi.recyclerview;
 
 import android.content.res.Configuration;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -109,12 +110,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewOnCli
     }
 
     @Override
-    public void getRecyclerViewPositionListnerCheck(int position) {
+    public void getRecyclerViewPositionListnerCheckBox(int position) {
         Persona persona = persone.get(position);
         if (!persona.getChecked())
             persona.setChecked(true);
         else
             persona.setChecked(false);
+    }
+
+    @Override
+    public void getRecyclerViewPoistionLongClick(int position) {
+        Persona persona = persone.get(position);
+        Snackbar.make(getCurrentFocus(), persona.getEmail(), Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

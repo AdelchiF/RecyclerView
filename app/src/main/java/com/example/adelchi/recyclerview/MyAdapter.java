@@ -21,7 +21,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private static RecyclerViewOnClickListner mRecyclerViewClickListner;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public TextView textView;
         public CheckBox checkBox;
@@ -29,6 +29,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             this.textView = (TextView) itemView.findViewById(R.id.text);
             this.checkBox = (CheckBox) itemView.findViewById(R.id.checkbox);
             this.checkBox.setOnClickListener(this);
@@ -37,10 +38,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             if(v instanceof CheckBox){
-                mRecyclerViewClickListner.getRecyclerViewPositionListnerCheck(this.getAdapterPosition());
+                mRecyclerViewClickListner.getRecyclerViewPositionListnerCheckBox(this.getAdapterPosition());
             }else {
                 mRecyclerViewClickListner.getRecyclerViewPositionListner(this.getAdapterPosition());
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mRecyclerViewClickListner.getRecyclerViewPoistionLongClick(this.getAdapterPosition());
+            return true;
         }
     }
 
