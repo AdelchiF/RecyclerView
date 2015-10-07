@@ -1,16 +1,22 @@
 package com.example.adelchi.recyclerview;
 
 import android.content.res.Configuration;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,13 +24,18 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NavigableMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewOnClickListner {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     private List<Persona> persone = new ArrayList<>();
+    private Toolbar toolbar;
+    private List<String> drawerElem = new ArrayList<>();
+    private DrawerLayout drawerLayout;
+    private ListView listViewNavDrawer;
 
     private boolean checked = false;
 
@@ -32,6 +43,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+        NavigationDrawerFragment navigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.nav_draw_fragment);
+        navigationDrawerFragment.setUp(R.id.nav_draw_fragment, drawerLayout, toolbar);
+
+        /*
+        drawerElem.add("Elemento 1");
+        drawerElem.add("Elemento 2");
+        drawerElem.add("Elemento 3");
+
+        listViewNavDrawer = (ListView)findViewById(R.id.left_drawer);
+
+        listViewNavDrawer.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerElem));
+
+        listViewNavDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String elem_selected = ((TextView)view).getText().toString();
+                Toast.makeText(getApplicationContext(), "Selezionato " + elem_selected, Toast.LENGTH_SHORT).show();
+            }
+        });
+        */
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -55,10 +93,28 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-        adapter = new MyAdapter(persone);
+        adapter = new MyAdapter(persone, this);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(layoutManager);
+
+
+    }
+
+    @Override
+    public void getRecyclerViewPositionListner(int position) {
+        persone.remove(position);
+        adapter.notifyItemRemoved(position);
+        Toast.makeText(this, "Prova posizione numero: " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getRecyclerViewPositionListnerCheck(int position) {
+        Persona persona = persone.get(position);
+        if (!persona.getChecked())
+            persona.setChecked(true);
+        else
+            persona.setChecked(false);
     }
 
     @Override

@@ -19,19 +19,33 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private ViewHolder viewHolder;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    private static RecyclerViewOnClickListner mRecyclerViewClickListner;
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView textView;
         public CheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             this.textView = (TextView) itemView.findViewById(R.id.text);
             this.checkBox = (CheckBox) itemView.findViewById(R.id.checkbox);
+            this.checkBox.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(v instanceof CheckBox){
+                mRecyclerViewClickListner.getRecyclerViewPositionListnerCheck(this.getAdapterPosition());
+            }else {
+                mRecyclerViewClickListner.getRecyclerViewPositionListner(this.getAdapterPosition());
+            }
         }
     }
 
-    public MyAdapter(List<MainActivity.Persona> persone) {
+    public MyAdapter(List<MainActivity.Persona> persone, RecyclerViewOnClickListner recyclerViewOnClickListner) {
+        mRecyclerViewClickListner = recyclerViewOnClickListner;
         this.persone = persone;
     }
 
@@ -52,6 +66,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         final MainActivity.Persona persona = persone.get(i);
 
+        viewHolder.textView.setText(persona.getEmail());
+
+        viewHolder.checkBox.setChecked(persona.getChecked());
+        /*
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,10 +77,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
             }
         });
-
-        viewHolder.textView.setText(persona.getEmail());
-
-        viewHolder.checkBox.setChecked(persona.getChecked());
 
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +87,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     persona.setChecked(false);
             }
         });
-
+        */
     }
 
     @Override
