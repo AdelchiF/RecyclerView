@@ -139,7 +139,35 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewOnCli
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.select_all) {
+        switch (id){
+            case R.id.select_all:
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        for (Persona persona : persone
+                                ) {
+                            if (checked) {
+                                persona.setChecked(false);
+                                ((TextView) findViewById(R.id.select_all)).setText("Select all");
+                            } else {
+                                persona.setChecked(true);
+                                ((TextView) findViewById(R.id.select_all)).setText("Deselect all");
+                            }
+                        }
+                    }
+                });
+                thread.run();
+                checked = !checked;
+                adapter.notifyDataSetChanged();
+                return true;
+            case R.id.add_elem:
+                persone.add(persone.size(), new Persona("adelchi" + persone.size() + "@gmail.com", false));
+                adapter.notifyItemInserted(persone.size());
+                recyclerView.smoothScrollToPosition(persone.size());
+                return true;
+        }
+        /*if (id == R.id.select_all) {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -160,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewOnCli
             checked = !checked;
             adapter.notifyDataSetChanged();
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
